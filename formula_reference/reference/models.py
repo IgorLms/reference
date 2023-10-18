@@ -28,9 +28,10 @@ class Reference(models.Model):
 class Employee(models.Model):
     BOOL_CHOICES = ((True, 'Работает'), (False, 'Уволен'))
 
-    full_name = models.CharField(max_length=100, verbose_name='ФИО сотрудника')
+    full_name = models.CharField(max_length=100, verbose_name='ФИО')
+    date_of_birth = models.DateField(verbose_name='Дата рождения')
     company_name = models.ForeignKey(Company, on_delete=models.PROTECT, verbose_name='Компания')
-    status = models.BooleanField(choices=BOOL_CHOICES, default=True, verbose_name='Статус сотрудника')
+    status = models.BooleanField(choices=BOOL_CHOICES, default=True, verbose_name='Статус')
 
     class Meta:
         ordering = ['full_name']
@@ -42,13 +43,10 @@ class Employee(models.Model):
 
 
 class ReferenceEmployee(models.Model):
-    BOOL_CHOICES = ((True, 'Активна'), (False, 'Просрочена'))
-
-    employee = models.ForeignKey(Employee, on_delete=models.PROTECT, verbose_name='ФИО сотрудника')
+    employee = models.ForeignKey(Employee, on_delete=models.PROTECT, verbose_name='ФИО')
     reference = models.ForeignKey(Reference, on_delete=models.PROTECT, verbose_name='Справка')
-    date_start = models.DateField(verbose_name='Дата регистрации справки')
+    date_start = models.DateField(verbose_name='Дата получения справки')
     date_end = models.DateField(verbose_name='Дата окончания справки')
-    status = models.BooleanField(choices=BOOL_CHOICES, default=True, verbose_name='Статус справки')
 
     class Meta:
         ordering = ['employee']
