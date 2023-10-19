@@ -1,0 +1,43 @@
+{% extends 'reference/base/base.html' %}
+
+{% block title %}Компания{% endblock title %}
+
+{% block content %}
+
+<table class="table">
+    <p class="lead">
+        {{ company_name.name|default:"Компания" }}
+    </p>
+    {% if references %}
+    <p class="lead">
+        Справки с истёкшим сроком действия.
+    </p>
+    <thead>
+        <tr>
+            {% for title in title_table %}
+            <th scope="col">{{ title }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for reference in references %}
+        <tr>
+            <td>
+                <a class="nav-link active" href="{% url 'admin:reference_employee_change' reference.employee.id %}">{{ reference.employee.full_name }}</a>
+            </td>
+            <td>{{ reference.employee.date_of_birth }}</td>
+            <td>
+                <a class="nav-link active" href="{% url 'admin:reference_referenceemployee_change' reference.id %}">{{ reference.reference.name }}</a>
+            </td>
+            <td>{{ reference.range_date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    {% else %}
+    <p class="lead">
+        Все справки актуальны.
+    </p>
+    {% endif %}
+</table>
+
+{% endblock content %}

@@ -1,0 +1,24 @@
+{% extends 'reference/base/base.html' %}
+
+{% block title %}Главная{% endblock title %}
+
+{% block content %}
+<div class="container my-md-4 bd-layout">
+    {% if companies %}
+    <p class="lead">
+        Выберите компанию для формирования таблицы с просроченными справками.
+    </p>
+    <ul class="list-group">
+        {% for company in companies %}
+        <li class="list-group-item">
+            <a class="nav-link active" href="{{ company.get_absolute_url }}">{{ company.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="lead">
+        Нет компаний.
+    </p>
+    {% endif %}
+</div>
+{% endblock content %}

@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Company(models.Model):
@@ -11,6 +12,9 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('company', kwargs={'id_company': self.pk})
 
 
 class Reference(models.Model):
@@ -55,4 +59,7 @@ class ReferenceEmployee(models.Model):
 
     def __str__(self):
         return str(self.employee)
+
+    def range_date(self):
+        return f"С {self.date_start.strftime('%d.%m.%y')} по {self.date_end.strftime('%d.%m.%y')}"
 

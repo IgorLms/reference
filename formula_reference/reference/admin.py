@@ -48,6 +48,15 @@ class EmployeeStatusFilter(admin.SimpleListFilter):
             return queryset.filter(employee__status=False)
 
 
+class EmployeeInline(admin.TabularInline):
+    """
+    Управление справками сотрудника, через панель сотрудника.
+    """
+
+    model = ReferenceEmployee
+    extra = 1
+
+
 @admin.register(ReferenceEmployee)
 class ReferenceEmployeeAdmin(admin.ModelAdmin):
     """Справки сотрудников"""
@@ -79,6 +88,7 @@ class ReferenceEmployeeAdmin(admin.ModelAdmin):
 class EmployeeAdmin(admin.ModelAdmin):
     """Сотрудники"""
 
+    inlines = [EmployeeInline]
     list_display = ('full_name', 'date_of_birth', 'company_name', 'status')
     list_per_page = 15
     search_fields = ['full_name']
