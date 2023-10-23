@@ -63,7 +63,7 @@ class ReferenceEmployeeAdmin(admin.ModelAdmin):
 
     list_display = ('employee', 'date_of_birth_info', 'company_info', 'reference', 'date_range_info', 'status_info')
     list_per_page = 15
-    search_fields = ['employee']
+    search_fields = ['employee__full_name']
     autocomplete_fields = ['employee']
     list_filter = ['reference__name', 'employee__company_name', ReferenceDateEndFilter, EmployeeStatusFilter]
 
