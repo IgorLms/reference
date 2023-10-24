@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
+
 from .models import Company, Reference, Employee, ReferenceEmployee
 from datetime import date
 
@@ -71,9 +73,9 @@ class ReferenceEmployeeAdmin(admin.ModelAdmin):
     def date_of_birth_info(self, reference_employee: ReferenceEmployee):
         return reference_employee.employee.date_of_birth
 
-    @admin.display(description='Компания', ordering='employee__company_name')
+    @admin.display(description='Компании')
     def company_info(self, reference_employee: ReferenceEmployee):
-        return reference_employee.employee.company_name
+        return mark_safe("{}".format("<br/>".join([company.name for company in reference_employee.employee.company_name.all()])))
 
     @admin.display(description='Срок справки')
     def date_range_info(self, reference_employee: ReferenceEmployee):
@@ -89,10 +91,15 @@ class EmployeeAdmin(admin.ModelAdmin):
     """Сотрудники"""
 
     inlines = [EmployeeInline]
-    list_display = ('full_name', 'date_of_birth', 'company_name', 'status')
+    list_display = ('full_name', 'date_of_birth', 'company_info', 'status')
     list_per_page = 15
     search_fields = ['full_name__iregex']
     list_filter = ['company_name', 'status']
+    filter_horizontal = ('company_name',)
+
+    @admin.display(description='Компании')
+    def company_info(self, employee: Employee):
+        return mark_safe("{}".format("<br/>".join([company.name for company in employee.company_name.all()])))
 
 
 """Компании"""

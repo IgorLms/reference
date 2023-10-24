@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 
 
 class Company(models.Model):
@@ -34,7 +35,7 @@ class Employee(models.Model):
 
     full_name = models.CharField(max_length=100, verbose_name='ФИО')
     date_of_birth = models.DateField(verbose_name='Дата рождения')
-    company_name = models.ForeignKey(Company, on_delete=models.PROTECT, verbose_name='Компания')
+    company_name = models.ManyToManyField(Company, verbose_name='Компания')
     status = models.BooleanField(choices=BOOL_CHOICES, default=True, verbose_name='Статус')
 
     class Meta:
