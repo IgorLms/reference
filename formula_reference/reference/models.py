@@ -1,6 +1,5 @@
 from django.db import models
 from django.urls import reverse
-from django.utils.safestring import mark_safe
 
 
 class Company(models.Model):
