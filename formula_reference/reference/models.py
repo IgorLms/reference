@@ -3,6 +3,8 @@ from django.urls import reverse
 
 
 class Company(models.Model):
+    """Компания"""
+
     name = models.CharField(max_length=30, verbose_name='Название компании')
 
     class Meta:
@@ -18,6 +20,8 @@ class Company(models.Model):
 
 
 class Reference(models.Model):
+    """Справка"""
+
     name = models.CharField(max_length=50, verbose_name='Наименование справки')
 
     class Meta:
@@ -30,6 +34,8 @@ class Reference(models.Model):
 
 
 class Employee(models.Model):
+    """Сотрудник"""
+
     BOOL_CHOICES = ((True, 'Работает'), (False, 'Уволен'))
 
     full_name = models.CharField(max_length=100, verbose_name='ФИО')
@@ -47,6 +53,8 @@ class Employee(models.Model):
 
 
 class ReferenceEmployee(models.Model):
+    """Справки сотрудников"""
+
     employee = models.ForeignKey(Employee, on_delete=models.PROTECT, verbose_name='ФИО')
     reference = models.ForeignKey(Reference, on_delete=models.PROTECT, verbose_name='Справка')
     date_start = models.DateField(verbose_name='Дата получения справки')
@@ -61,5 +69,6 @@ class ReferenceEmployee(models.Model):
         return str(self.employee)
 
     def range_date(self):
+        """Формирование строки срока справки"""
         return f"С {self.date_start.strftime('%d.%m.%y')} по {self.date_end.strftime('%d.%m.%y')}"
 

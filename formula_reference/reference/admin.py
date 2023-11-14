@@ -63,26 +63,35 @@ class EmployeeInline(admin.TabularInline):
 class ReferenceEmployeeAdmin(admin.ModelAdmin):
     """Справки сотрудников"""
 
+    # Отображения столбцов в списке
     list_display = ('employee', 'date_of_birth_info', 'company_info', 'reference', 'date_range_info', 'status_info')
+    # Пагинация
     list_per_page = 15
+    # Поиск
     search_fields = ['employee__full_name__iregex']
+    # Поиск сотрудника при добавлении поля справки сотрудника
     autocomplete_fields = ['employee']
+    # Фильтр
     list_filter = ['reference__name', 'employee__company_name', ReferenceDateEndFilter, EmployeeStatusFilter]
 
     @admin.display(description='Дата рождения')
     def date_of_birth_info(self, reference_employee: ReferenceEmployee):
+        """Отображение даты рождения"""
         return reference_employee.employee.date_of_birth
 
     @admin.display(description='Компании')
     def company_info(self, reference_employee: ReferenceEmployee):
+        """Отображение компании по вертикали"""
         return mark_safe("{}".format("<br/>".join([company.name for company in reference_employee.employee.company_name.all()])))
 
     @admin.display(description='Срок справки')
     def date_range_info(self, reference_employee: ReferenceEmployee):
+        """Формирование строки срока справки"""
         return f"С {reference_employee.date_start.strftime('%d.%m.%y')} по {reference_employee.date_end.strftime('%d.%m.%y')}"
 
     @admin.display(description='Статус')
     def status_info(self, reference_employee: ReferenceEmployee):
+        """Статус справки"""
         return 'Активная' if reference_employee.date_end >= date.today() else 'Просрочена'
 
 
@@ -90,15 +99,22 @@ class ReferenceEmployeeAdmin(admin.ModelAdmin):
 class EmployeeAdmin(admin.ModelAdmin):
     """Сотрудники"""
 
+    # Управление справками сотрудника, через панель сотрудника.
     inlines = [EmployeeInline]
+    # Отображения столбцов в списке
     list_display = ('full_name', 'date_of_birth', 'company_info', 'status')
+    # Пагинация
     list_per_page = 15
+    # Поиск
     search_fields = ['full_name__iregex']
+    # Фильтры
     list_filter = ['company_name', 'status']
+    # Горизонтальное отображение добавления компании
     filter_horizontal = ('company_name',)
 
     @admin.display(description='Компании')
     def company_info(self, employee: Employee):
+        """Вертикальное отображение компаний сотрудника"""
         return mark_safe("{}".format("<br/>".join([company.name for company in employee.company_name.all()])))
 
 
